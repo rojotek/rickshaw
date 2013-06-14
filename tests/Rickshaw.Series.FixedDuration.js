@@ -73,3 +73,26 @@ exports.addData = function(test) {
 	test.equal(series.currentSize, 20, 'series.currentSize is stuck at maxDataPoints');
 	test.done();
 };
+
+exports.addDataWithXAxisValue = function(test) {
+
+	var series = new Rickshaw.Series.FixedDuration(
+		[seriesData()],
+		'spectrum2001',
+		{
+			timeBase: 0,
+			timeInterval: 1,
+			maxDataPoints: 20
+		}
+	);
+
+	for (var i = 0; i < 300; i++) {
+		series.addData({series1: 42}, i*3);
+	}
+
+	test.equal(series[0].data.length, 20 + 2, 'series length stuck around maxDataPoints');
+	test.equal(series[0].data[series[0].data.length-1].x, 299*3, "x value at the end of the range should be correct.")
+	test.equal(series[0].data[0].x, (299-series[0].data.length+1)*3, "x value at the first point in the range should be correct.")
+	test.equal(series.currentSize, 20, 'series.currentSize is stuck at maxDataPoints');
+	test.done();
+};
